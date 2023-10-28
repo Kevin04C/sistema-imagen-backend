@@ -29,7 +29,7 @@ class AuthRegisterRequest extends FormRequest
             'dni' => 'required|int|unique:usuarios',
             'correo' => 'required|email|unique:usuarios',
             'contrasena' => 'required|string|min:8',
-            'id_rol' => 'nullable|int'
+            'roles_id' => 'required|array'
         ];
     }
     public function messages()

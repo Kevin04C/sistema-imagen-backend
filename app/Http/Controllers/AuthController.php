@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ErrorResponseHtpp;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthRegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Usuario;
-use App\Models\UsuariosRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -22,16 +22,12 @@ class AuthController extends Controller
                 'apellidos' => $request->apellidos,
                 'dni' => $request->dni,
                 'correo' => $request->correo,
-                'contrasena' => $password_hash
+                'contrasena' => $password_hash,
             ]);
 
-
-            UsuariosRole::create([
-                'usuario_id' => $user->id,
-                'rol_id' => 1 // POR DEFECTO TODOS LOS USUARIOS SON CLIENTES
-            ]);
-
+            $user->roles()->attach($request->roles_id);
             $token = JWTAuth::fromUser($user);
+
             return response()->json([
                 'type' => 'success',
                 'message' => ['Usuario registrado correctamente'],
@@ -39,11 +35,7 @@ class AuthController extends Controller
                 'token' => $token
             ]);
         } catch (\Throwable $th) {
-            return response()->json([
-                'type' => 'error',
-                'message' => ['Error interno del servidor'],
-                'data' => null
-            ], 500);
+            throw new ErrorResponseHtpp(500);
         }
     }
 
@@ -60,6 +52,7 @@ class AuthController extends Controller
                     'data' => null
                 ], 401);
             }
+
             $match_password = Hash::check($crendentials['contrasena'], $user->contrasena);
             if (!$match_password) {
                 return response()->json([
@@ -112,11 +105,7 @@ class AuthController extends Controller
                 'token' => $renew_token,
             ]);
         } catch (\Throwable $th) {
-            return response()->json([
-                'type' => 'error',
-                'message' => ['Error interno del servidor'],
-                'data' => null
-            ], 500);
+            throw new ErrorResponseHtpp(500);
         }
     }
 }
