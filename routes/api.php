@@ -35,6 +35,7 @@ Route::post("/auth/login", [AuthController::class, 'login']);
 Route::get("/auth/renew", [AuthController::class, 'renewToken']);
 
 
+Route::get('/products', [ProductController::class, 'getProducts']);
 Route::post('/products', [ProductController::class, 'createProduct']);
 Route::get('/products/{id}', [ProductController::class, 'getProductById']);
 

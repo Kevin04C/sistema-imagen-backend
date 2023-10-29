@@ -19,7 +19,7 @@ class ProductController extends Controller
         try {
             return response()->json([
                 'type' => 'success',
-                'messages' => 'Producto creado correctamente',
+                'messages' => ['Producto creado correctamente'],
                 'data' => $imagen,
             ], 201);
 
@@ -54,9 +54,9 @@ class ProductController extends Controller
 
             return response()->json([
                 'type' => 'success',
-                'messages' => 'Producto creado correctamente',
+                'messages' => [''],
                 'data' => new ProductResource($product),
-            ], 201);
+            ], 200);
 
         } catch (\Throwable $th) {
             throw new ErrorResponseHtpp(500);
