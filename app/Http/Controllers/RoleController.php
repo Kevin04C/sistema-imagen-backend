@@ -15,7 +15,7 @@ class RoleController extends Controller
             $roles = Role::all();
             return response()->json([
                 'type' => 'success',
-                'message' => [],
+                'messages' => [],
                 'data' => $roles
             ]);
         } catch (\Throwable $th) {
