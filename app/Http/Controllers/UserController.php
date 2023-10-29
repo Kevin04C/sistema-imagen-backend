@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\ErrorResponseHtpp;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateUserPasswordRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
@@ -18,13 +19,13 @@ class UserController extends Controller
             $users = Usuario::all();
             return response()->json([
                 'type' => 'success',
-                'message' => [],
+                'messages' => [],
                 'data' => new UserCollection($users)
             ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'type' => 'error',
-                'message' => ['Error interno del servidor'],
+                'messages' => ['Error interno del servidor'],
                 'data' => null
             ], 500);
         }
@@ -38,7 +39,7 @@ class UserController extends Controller
             if (!$user) {
                 return response()->json([
                     'type' => 'error',
-                    'message' => ['Usuario no encontrado'],
+                    'messages' => ['Usuario no encontrado'],
                     'data' => null
                 ], 404);
             }
@@ -52,7 +53,7 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'type' => 'error',
-                'message' => ['Error interno del servidor'],
+                'messages' => ['Error interno del servidor'],
                 'data' => null
             ], 500);
         }
@@ -77,7 +78,7 @@ class UserController extends Controller
 
             return response()->json([
                 'type' => 'success',
-                'message' => ['Actulizar usuario'],
+                'messages' => ['Actulizar usuario'],
                 'data' => new UserResource($user)
             ]);
         } catch (\Throwable $th) {
@@ -93,14 +94,34 @@ class UserController extends Controller
             if (!$user) {
                 return response()->json([
                     'type' => 'error',
+                    'messages' => ['Usuario no encontrado'],
+                    'data' => null
+                ], 404);
+            }
+            $user->delete();
+        } catch (\Throwable $th) {
+            throw new ErrorResponseHtpp(500);
+        }
+    }
+
+    public function updatePassword(UpdateUserPasswordRequest $request)
+    {
+        try {
+            $user = Usuario::find((int) $request->id);
+            if (!$user) {
+                return response()->json([
+                    'type' => 'error',
                     'message' => ['Usuario no encontrado'],
                     'data' => null
                 ], 404);
             }
-
-            $user->delete();
-            
-
+            $user->contrasena = bcrypt($request->contrasena);
+            $user->save();
+            return response()->json([
+                'type' => 'success',
+                'messages' => ['Contraseña actualizada'],
+                'data' => new UserResource($user)
+            ]);
 
         } catch (\Throwable $th) {
             throw new ErrorResponseHtpp(500);

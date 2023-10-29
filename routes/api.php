@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/users', [UserController::class, 'getUsers']);
 Route::get('/users/{id}', [UserController::class, 'getUser']);
 Route::put("users/{id}", [UserController::class, "updateUser"]);
+Route::put("users/update-password/{id}", [UserController::class, "updatePassword"]);
 
 Route::get('/roles', [RoleController::class, 'getRoles']);
 
@@ -34,4 +35,3 @@ Route::get("/auth/renew", [AuthController::class, 'renewToken']);
 
 
 Route::post('/products', [ProductController::class, 'createProduct']);
-    
