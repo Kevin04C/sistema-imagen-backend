@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -35,3 +36,6 @@ Route::get("/auth/renew", [AuthController::class, 'renewToken']);
 
 
 Route::post('/products', [ProductController::class, 'createProduct']);
+Route::get('/products/{id}', [ProductController::class, 'getProductById']);
+
+Route::get('/categories', [CategoryController::class, 'getCategories']);
