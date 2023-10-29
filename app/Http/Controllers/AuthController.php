@@ -30,7 +30,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'type' => 'success',
-                'message' => ['Usuario registrado correctamente'],
+                'messages' => ['Usuario registrado correctamente'],
                 'data' => new UserResource($user),
                 'token' => $token
             ]);
@@ -48,7 +48,7 @@ class AuthController extends Controller
             if (!$user) {
                 return response()->json([
                     'type' => 'error',
-                    'message' => ['Correo o contraseña incorrectas'],
+                    'messages' => ['Correo o contraseña incorrectas'],
                     'data' => null
                 ], 401);
             }
@@ -64,7 +64,7 @@ class AuthController extends Controller
             $token = auth()->login($user);
             return response()->json([
                 'type' => 'success',
-                'message' => [],
+                'messages' => [],
                 'data' => new UserResource($user),
                 'token' => $token
             ]);
@@ -83,7 +83,7 @@ class AuthController extends Controller
             if (!$header_token || is_null($header_token)) {
                 return response()->json([
                     'type' => 'error',
-                    'message' => ['No existe token en la petición'],
+                    'messages' => ['No existe token en la petición'],
                     'data' => []
                 ], 401);
             }
@@ -100,7 +100,7 @@ class AuthController extends Controller
             $renew_token = JWTAuth::parseToken()->refresh();
             return response()->json([
                 'type' => 'success',
-                'message' => [],
+                'messages' => [],
                 'data' => new UserResource($user),
                 'token' => $renew_token,
             ]);
