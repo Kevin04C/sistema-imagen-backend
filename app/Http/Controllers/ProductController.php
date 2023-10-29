@@ -16,7 +16,7 @@ class ProductController extends Controller
         try {
             return response()->json([
                 'type' => 'success',
-                'message' => 'Producto creado correctamente',
+                'messages' => 'Producto creado correctamente',
                 'data' => $imagen,
             ], 201);
 
